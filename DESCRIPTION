@@ -1,11 +1,19 @@
 Package: occUncertain
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Functions For Addressing Occurence Point Uncertainty When Calculating Spatial Metrics
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Date: 2020-03-12
+Authors@R: c(
+    person("Samuel V.", "Chang Triguero", email = "sc92478p@pace.edu", role = c("aut", "cre")), 
+    person("Matthew E.", "Aiello-Lammens", email = "matt.lammens@gmail.com", role = "aut"))
+Description: A set of functions that can be used to help ecologists and 
+    conservation biologists account for occurence point uncertainty when 
+    calculating spatial metrics such as AOO and EOO
+BugReports: https://github.com/mlammens/occUncertainty/issues
+Depends:
+    dplyr
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 7.0.0
