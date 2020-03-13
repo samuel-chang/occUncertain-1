@@ -19,11 +19,11 @@
 #'   units of degree decimal.
 #'
 meters_to_decdeg <- function(occs_df, lat_col = "latitude", lon_col = "longitude", distance){
-  lat <- occs_df[lat_col]
-  lon <- occs_df[lon_col]
-  dist <- occs_df[distance]
-  lon_uncertainty = dist / (111.32 * 1000)
-  lat_uncertainty = dist / (111.32 * 1000) + (cos(lon) / 360)
+  lat <- occs_df[[lat_col]]
+  lon <- occs_df[[lon_col]]
+  dist <- occs_df[[distance]]
+  lon_uncertainty <- dist / (111.32 * 1000)
+  lat_uncertainty <- dist / (111.32 * 1000) + (cos(lon) / 360)
   dist_dd <- data.frame(lon_uncertainty = lon_uncertainty,
                         lat_uncertainty = lat_uncertainty)
   return(dist_dd)
