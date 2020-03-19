@@ -1,12 +1,12 @@
 #' @export meters_to_decdeg
 #'
-#' @title Convert from meters to decimal degrees correcting for global position
+#' @title Convert from meters to degrees correcting for global position
 #'
 #' @description
-#' \code{meters_to_decdeg} converts from meters to decimal degrees at a specified
+#' \code{meters_to_decdeg} converts from meters to degrees at a specified
 #' position on the globe. The use case this function was developed for was to
 #' calculate occurence point uncertainty values, which are usually reported in
-#' meters, as decimal degrees.
+#' meters, as degrees.
 #'
 #' @param occs_df A \code{data.frame} of occurrence locations that incudes
 #'   \emph{at least these three columns} - latitude, longitude, and a distance
@@ -14,16 +14,31 @@
 #' @param lat_col Name of column of latitude values. Caps sensitive.
 #' @param lon_col Name of column of longitude values. Caps sensitive.
 #' @param distance Name of column of distance values, in meters. Caps sensitive.
-#'
+#' @param na_action Enact distance options for NA values. Caps sensitive
 #' @return dist_dd A \code{data.frame} of latitude and longitude distances in
 #'   units of degree decimal.
 #'
-meters_to_decdeg <- function(occs_df, lat_col = "latitude", lon_col = "longitude", distance){
+meters_to_decdeg <- function(occs_df, lat_col = "latitude",
+                             lon_col = "longitude", distance, na_action = "NA as 0") {
   lat <- occs_df[[lat_col]]
   lon <- occs_df[[lon_col]]
   dist <- occs_df[[distance]]
-  lon_uncertainty <- dist / (111.32 * 1000)
-  lat_uncertainty <- dist / (111.32 * 1000) + (cos(lon) / 360)
+  #enact distance options for NA
+  # treat NA as 0
+  # treat NA as mean dist
+  # treat NA as NA
+  if (na_action == "NA as 0") {
+    dist <- ifelse (is.na(dist), yes = 0, no = dist )
+  } else if (na_action == "NA as mean") {
+    dist <- ifelse (is.na(dist), yes = mean(dist, na.rm = TRUE), no = dist )
+  } else if (na_action == "NA as NA" ) {
+    dist = dist
+  } else {
+    warning("Incorrect na_action chosen")
+    return(0)
+  }
+  lon_uncertainty <- dist/(111.32 * 1000) * (cos(lat * pi/180))
+  lat_uncertainty <- dist/(111.32 * 1000)
   dist_dd <- data.frame(lon_uncertainty = lon_uncertainty,
                         lat_uncertainty = lat_uncertainty)
   return(dist_dd)
