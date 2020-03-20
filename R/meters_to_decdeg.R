@@ -8,6 +8,10 @@
 #' calculate occurence point uncertainty values, which are usually reported in
 #' meters, as degrees.
 #'
+#' The formula for converting from meters to decimal degrees is in part
+#' based on information from the ESRI ArcUser magazine at this site
+#' \url{https://www.esri.com/news/arcuser/0400/wdside.html}
+#'
 #' @param occs_df A \code{data.frame} of occurrence locations that incudes
 #'   \emph{at least these three columns} - latitude, longitude, and a distance
 #'   in meters to be converted to decimal degrees.
