@@ -4,3 +4,5 @@
 .Ruserdata
 Icon?
 inst/doc
+.DS_Store
+*/.DS_Store
