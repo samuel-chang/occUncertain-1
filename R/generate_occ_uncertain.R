@@ -13,10 +13,12 @@
 #' @param lon_uncertainty Name of column of longitude uncertainty in degree values. Caps sensitive.
 #' @param lon_random latitude random deviates of the interval from min to max. Caps sensitive.
 #' @param lon_random longitude random deviates of the interval from min to max. Caps sensitive.
+#' @param taxa_col Name of column of taxa (species) values. Caps sensitive.
 #'
 generate_occ_uncertain <- function(occs_df, lat_col = "latitude",
                                    lat_uncertainty = "latitude_uncertainty", lon_col = "longitude",
-                                   lon_uncertainty = "longitude_uncertainty"){
+                                   lon_uncertainty = "longitude_uncertainty",
+                                   taxa_col = "species"){
   lat <- occs_df[[lat_col]]
   lon <- occs_df[[lon_col]]
   lat_uncertainty <- occs_df[[lat_uncertainty]]
@@ -28,6 +30,6 @@ generate_occ_uncertain <- function(occs_df, lat_col = "latitude",
   lon_random <- runif(n = length(lon),
                       min = lon - lon_uncertainty, max = lon +
                         lon_uncertainty)
-  random_dd <- data.frame(lat_random = lat_random, lon_random = lon_random)
+  random_dd <- data.frame(lat_random = lat_random, lon_random = lon_random, tax = occs_df[[taxa_col]] )
   return(random_dd)
 }
