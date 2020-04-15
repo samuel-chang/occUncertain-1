@@ -47,9 +47,6 @@ Lets take a look into the data set, it is required to have at least three column
 ```{r head}
 head(Leopardus_wiedii_gbif)
 ```
-
-
-
 # 4. meters_to_decdeg function
 
 The function **meters_to_decdeg** transforms the units into radian degrees for each occurence point. Its impotant to consider the fact that as one moves away from the equator towards a pole, one degree of longitude is multiplied by the cosine of the latitude, decreasing the distance, approaching zero at the pole.  
@@ -87,8 +84,6 @@ data <- as.data.frame(coordinates(data)) # This converts the SpatialPoints objec
 data <- data
 --->
 For the rest of the example we will use the na_action = "NA as mean"
-
-
 
 # 5. generate_occ_uncertain function
 
@@ -190,7 +185,13 @@ Use a for loop to repeat the randomizing points, then calc EOO and AOO, 10 times
 Save each EOO and AOO result, so you should have 10 of each. 
 
 ```{r}
+random_range(Leopardus_wiedii, lat_col = "latitude", lon_col = "longitude", 
+                                       lat_uncertainty = "lat_uncertainty", 
+                                       lon_uncertainty = "lon_uncertainty",
+                                       taxa_col = "species")
 # Initiate vectors
+library(tictoc)
+tic("total")
 rand_EOOs <- c()
 rand_AOOs <- c()
 
@@ -209,8 +210,9 @@ for(x in 1:100){
   AOO_temp <- AOO.computing(occ_random)
   # Add new AOO value to rand_AOOs
   rand_AOOs <- c(rand_AOOs, AOO_temp) 
- }
 
+}
 
+toc()
 ```
 
