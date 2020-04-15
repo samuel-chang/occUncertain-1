@@ -115,15 +115,13 @@ points(Leopardus_wiedii_random$lon_random, Leopardus_wiedii_random$lat_random, c
 ```
 ----
 
-# 6. Using the random occurences in land metrics
+# 6. Using the random occurences in land metrics with ConR
 
 ## 6.1 Input file 
 
 Is is required a data frame with at least three different columns: 
 
 ```{r file}
-library(ConR)
-
 head(Leopardus_wiedii_random)
 ```
 1. lat_random: Latitude in decimal degrees
@@ -185,24 +183,23 @@ Use a for loop to repeat the randomizing points, then calc EOO and AOO, 10 times
 Save each EOO and AOO result, so you should have 10 of each. 
 
 ```{r}
-random_range(Leopardus_wiedii, lat_col = "latitude", lon_col = "longitude", 
-                                       lat_uncertainty = "lat_uncertainty", 
-                                       lon_uncertainty = "lon_uncertainty",
-                                       taxa_col = "species")
+
 # Initiate vectors
+library(ConR)
 library(tictoc)
 tic("total")
+
 rand_EOOs <- c()
 rand_AOOs <- c()
 
-for(x in 1:100){
+for(x in 1:10){
   # Get random points
   occ_random <- generate_occ_uncertain(Leopardus_wiedii, lat_col = "latitude", lon_col = "longitude", 
                                        lat_uncertainty = "lat_uncertainty", 
                                        lon_uncertainty = "lon_uncertainty",
                                        taxa_col = "species")
   # Calculate EOO
-  EOO_temp <- EOO.computing(occ_random, exclude.area = T, country_map = land)
+  EOO_temp <- EOO.computing(occ_random)
   # Add new EOO value to rand_EOOs
   rand_EOOs <- c(rand_EOOs, EOO_temp)
   
@@ -211,7 +208,7 @@ for(x in 1:100){
   # Add new AOO value to rand_AOOs
   rand_AOOs <- c(rand_AOOs, AOO_temp) 
 
-}
+  }
 
 toc()
 ```
