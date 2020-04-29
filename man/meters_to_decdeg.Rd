@@ -4,13 +4,8 @@
 \alias{meters_to_decdeg}
 \title{Convert from meters to degrees correcting for global position}
 \usage{
-meters_to_decdeg(
-  occs_df,
-  lat_col = "latitude",
-  lon_col = "longitude",
-  distance,
-  na_action = "NA as 0"
-)
+meters_to_decdeg(occs_df, lat_col = "latitude", lon_col = "longitude",
+  distance, na_action = "NA as 0")
 }
 \arguments{
 \item{occs_df}{A \code{data.frame} of occurrence locations that incudes
@@ -34,4 +29,8 @@ dist_dd A \code{data.frame} of latitude and longitude distances in
 position on the globe. The use case this function was developed for was to
 calculate occurence point uncertainty values, which are usually reported in
 meters, as degrees.
+
+The formula for converting from meters to decimal degrees is in part
+based on information from the ESRI ArcUser magazine at this site
+\url{https://www.esri.com/news/arcuser/0400/wdside.html}
 }

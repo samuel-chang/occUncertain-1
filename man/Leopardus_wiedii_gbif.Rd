@@ -3,7 +3,7 @@
 \docType{data}
 \name{Leopardus_wiedii_gbif}
 \alias{Leopardus_wiedii_gbif}
-\title{Occurence data for \emph{Leopardus wiedii} aquired from GBIF}
+\title{Occurence data for \emph{Leopardus wiedii} acquired from GBIF}
 \format{An object of class \code{data.frame} with 229 rows and 135 columns.}
 \source{
 \url{http://www.gbif.org}
@@ -12,7 +12,9 @@
 Leopardus_wiedii_gbif
 }
 \description{
-Give some more description of this data set, including the
-associated GBIF citation.
+The margay (Leopardus wiedii, Schinz 1821) is a small Neotropical cat that is native with distribution from South America into Northeastern Mexico.  Citation - GBIF.org (24 March 2020) GBIF Occurrence Download https://doi.org/10.15468/dl.5xb5f9
+}
+\details{
+DOI 10.15468/dl.ljhrm9
 }
 \keyword{datasets}
