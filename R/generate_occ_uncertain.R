@@ -5,7 +5,7 @@
 #' @description
 #' \code{generate_occ_uncertain} Generate random latitude and longitude coordinates with uncertain values. The use case this function was developed for was to generate occurence point uncertainty coordinates.
 #'
-#' @param occs_df A \code{data.frame} of occurrence locations that incudes
+#' @param occs_df A \code{data.frame} of occurrence locations that includes
 #'   \emph{at least these four columns} - latitude, longitude, latitude uncertainty and longitude uncertainty in degrees.
 #' @param lat_col Name of column of latitude values. Caps sensitive.
 #' @param lon_col Name of column of longitude values. Caps sensitive.
