@@ -7,8 +7,8 @@
 #'
 #' @param occs_df A \code{data.frame} of occurrence locations that includes
 #'   \emph{at least these four columns} - latitude, longitude, latitude uncertainty and longitude uncertainty in degrees.
-#' @param lat_col Name of column of latitude values. Caps sensitive.
-#' @param lon_col Name of column of longitude values. Caps sensitive.
+#' @param lat_col Name of column of latitude dbl values. Caps sensitive.
+#' @param lon_col Name of column of longitude dbl values. Caps sensitive.
 #' @param lat_uncertainty Name of column of latitude uncertainty in degree values. Caps sensitive.
 #' @param lon_uncertainty Name of column of longitude uncertainty in degree values. Caps sensitive.
 #' @param lon_random latitude random deviates of the interval from min to max. Caps sensitive.
