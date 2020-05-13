@@ -183,7 +183,7 @@ Use a for loop to repeat the randomizing points, then calc EOO and AOO, 10 times
 Save each EOO and AOO result, so you should have 10 of each. 
 
 ```{r}
-
+random_geo_range()
 # Initiate vectors
 library(ConR)
 library(tictoc)
