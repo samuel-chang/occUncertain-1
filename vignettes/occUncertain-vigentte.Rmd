@@ -53,16 +53,19 @@ The function **meters_to_decdeg** transforms the units into radian degrees for e
 
 In case of having an NA values for the uncertaity, the function includes a parameter *na_action*; which enacts distance options for NA values. The options are "NA as zero" , "NA as mean", and "NA as NA".
 
-
 ```{r uncertainty from meter to radian degrees NA as 0}
 Leopardus_wiedii_uncertainty_naZero <- meters_to_decdeg(Leopardus_wiedii_gbif, distance = "coordinateUncertaintyInMeters", na_action = "NA as 0")
 
 head(Leopardus_wiedii_uncertainty_naZero)
+
+Leopardus_wiedii_uncertainty_naZero <- cbind(Leopardus_wiedii_gbif, Leopardus_wiedii_uncertainty_naZero)
 ```
 
 ```{r uncertainty from meter to radian degrees NA as mean}
 Leopardus_wiedii_uncertainty_naMean <- meters_to_decdeg(Leopardus_wiedii_gbif, distance = "coordinateUncertaintyInMeters", na_action = "NA as mean")
 head(Leopardus_wiedii_uncertainty_naMean)
+
+Leopardus_wiedii_uncertainty_naMean <- cbind(Leopardus_wiedii_gbif, Leopardus_wiedii_uncertainty_naMean)
 
 ```
 
@@ -70,19 +73,10 @@ head(Leopardus_wiedii_uncertainty_naMean)
 Leopardus_wiedii_uncertainty_naNA <- meters_to_decdeg(Leopardus_wiedii_gbif, distance = "coordinateUncertaintyInMeters", na_action = "NA as NA")
 head(Leopardus_wiedii_uncertainty_naNA)
 
+Leopardus_wiedii_uncertainty_naNA <- cbind(Leopardus_wiedii_gbif, Leopardus_wiedii_uncertainty_naNA)
+
 ```
 
-<!---
-# Set the projection of the original data, and then use spTransform the coordinates into UTM 
-
-proj4string(Leopardus_wiedii) <- CRS("+proj=utm + ellps=WGS84") # This sets the projection of the data, assuming that you are using the WGS84 ellipsoid (if you do not know for sure, it is a safe assumption)
-
-data <-spTransform(data,CRS="+proj=utm +zone=27 +datum=WGS84") # Use whatever UTM zone you need.
-crs(data)
-
-data <- as.data.frame(coordinates(data)) # This converts the SpatialPoints object back into a data frame
-data <- data
---->
 For the rest of the example we will use the na_action = "NA as mean"
 
 # 5. generate_occ_uncertain function
@@ -93,23 +87,14 @@ The function **generate_occ_uncertain** uses uncertain values to generate random
 3. Latitude uncertainty in decimal degrees.
 4. Longitude uncertainty in decimal degrees.
 
-```{r combine}
-Leopardus_wiedii <- cbind(Leopardus_wiedii_gbif, Leopardus_wiedii_uncertainty_naMean)
-
-head(Leopardus_wiedii)
-```
-
 Lets generate random occurrence latitude and longitude coordinates with uncertain values. 
 ```{r generate}
-
-Leopardus_wiedii_random <- generate_occ_uncertain(Leopardus_wiedii, lat_col = "latitude", lon_col = "longitude", lat_uncertainty = "lat_uncertainty", lon_uncertainty = "lon_uncertainty", taxa_col = "species")
+Leopardus_wiedii_random <- generate_occ_uncertain(Leopardus_wiedii_uncertainty_naMean, lat_col = "latitude", lon_col = "longitude", lat_uncertainty = "lat_uncertainty", lon_uncertainty = "lon_uncertainty", taxa_col = "species")
 
 head(Leopardus_wiedii_random)
 ```
-
-
 ## Lets visualize 
-```{r}
+```{r eval=FALSE, include=FALSE}
 plot(Leopardus_wiedii$longitude, Leopardus_wiedii$latitude)
 points(Leopardus_wiedii_random$lon_random, Leopardus_wiedii_random$lat_random, col = "red", pch = 21)
 ```
@@ -161,54 +146,20 @@ EOO.computing(Leopardus_wiedii_random, exclude.area = F, country_map = land)
 Area of occupancy (AOO), is the area occupied by a taxon within its extent of occurrence. The measure reflects the fact that a taxon will not usually occur throughout the area of its extent of occurrence, which may contain unsuitable or unoccupied habitats.
 
 ```{r AOO}
-
 L_weidii_AOO <- AOO.computing(Leopardus_wiedii_random)
 L_weidii_AOO
 ```
-
-
-
 ## 6.4 Runing IUCN.eval function 
-
 ```{r IUCN}
-
 IUCN.eval(Leopardus_wiedii_random)
 ```
 
-
-
 # 7 Next steps
 
-Use a for loop to repeat the randomizing points, then calc EOO and AOO, 10 times.
+The function {*random_geo_range*} Use a for loop to repeat the randomizing points, then calc EOO and AOO, 10 times.
 Save each EOO and AOO result, so you should have 10 of each. 
 
 ```{r}
-random_geo_range()
-# Initiate vectors
-library(ConR)
-library(tictoc)
-tic("total")
+Leopardus_weidii_random_geo_range <- random_geo_range(10, Leopardus_wiedii)
 
-rand_EOOs <- c()
-rand_AOOs <- c()
-
-for(x in 1:10){
-  # Get random points
-  occ_random <- generate_occ_uncertain(Leopardus_wiedii, lat_col = "latitude", lon_col = "longitude", 
-                                       lat_uncertainty = "lat_uncertainty", 
-                                       lon_uncertainty = "lon_uncertainty",
-                                       taxa_col = "species")
-  # Calculate EOO
-  EOO_temp <- EOO.computing(occ_random)
-  # Add new EOO value to rand_EOOs
-  rand_EOOs <- c(rand_EOOs, EOO_temp)
-  
-  # Calcualte AOO
-  AOO_temp <- AOO.computing(occ_random)
-  # Add new AOO value to rand_AOOs
-  rand_AOOs <- c(rand_AOOs, AOO_temp) 
-
-  }
-
-toc()
 ```

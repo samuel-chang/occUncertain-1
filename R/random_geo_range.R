@@ -22,22 +22,19 @@ random_geo_range <- function(n_length, occs_df, lat_col = "latitude", lon_col = 
                              lon_uncertainty = "lon_uncertainty",
                              taxa_col = "species",...)
 {
-  lat <- occs_df[[lat_col]]
-  lon <- occs_df[[lon_col]]
-  lat_uncertainty <- occs_df[[lat_uncertainty]]
-  lon_uncertainty <- occs_df[[lon_uncertainty]]
-
   rand_EOOs = c()
   rand_AOOs = c()
 
   for (i in 1:n_length) {
     set.seed(i)
-
-    occ_random <- generate_occ_uncertain(occs_df, lat_col = "latitude", lon_col = "longitude",
-                                         lat_uncertainty = "lat_uncertainty",
-                                         lon_uncertainty = "lon_uncertainty",
-                                         taxa_col = "species")
+    occ_random <- generate_occ_uncertain(occs_df, 
+      lat_col = lat_col, 
+      lon_col = lon_col,
+      lat_uncertainty = lat_uncertainty,
+      lon_uncertainty = lon_uncertainty,
+      taxa_col = taxa_col)
     {
+         
       # Calculate EOO
       EOO_temp <- EOO.computing(occ_random, exclude.area = T, country_map = land)$EOO
       # Add new EOO value to rand_EOOs
