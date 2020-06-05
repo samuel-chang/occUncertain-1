@@ -33,10 +33,16 @@ random_geo_range <- function(n_length, occs_df, lat_col = "latitude", lon_col = 
       lat_uncertainty = lat_uncertainty,
       lon_uncertainty = lon_uncertainty,
       taxa_col = taxa_col)
-    {
-         
+    
+    
       # Calculate EOO
-      EOO_temp <- EOO.computing(occ_random, exclude.area = T, country_map = land)$EOO
+    EOO_temp <-
+      EOO.computing(
+        occ_random,
+        exclude.area = T,
+        country_map = land,
+        write_results = F
+      )$EOO
       # Add new EOO value to rand_EOOs
       rand_EOOs <- c(rand_EOOs, EOO_temp)
 
@@ -44,7 +50,7 @@ random_geo_range <- function(n_length, occs_df, lat_col = "latitude", lon_col = 
       AOO_temp <- AOO.computing(occ_random)
       # Add new AOO value to rand_AOOs
       rand_AOOs <- c(rand_AOOs, AOO_temp)
-    }
+    
 
   }
   return (data.frame(rand_EOO = rand_EOOs, rand_AOO = rand_AOOs))
