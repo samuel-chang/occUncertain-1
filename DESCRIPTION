@@ -11,7 +11,7 @@ Description: A set of functions that can be used to help ecologists and
     calculating spatial metrics such as AOO and EOO
 BugReports: https://github.com/mlammens/occUncertainty/issues
 Depends:
-    knitr
+    knitr,
     ConR
 License: GPL-3
 Encoding: UTF-8

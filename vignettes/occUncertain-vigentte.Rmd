@@ -57,12 +57,14 @@ The function allows interpretation of NA uncertainty values through the conditio
 The options are:
 1. NA as zero, assigns zero to all NA values,
 ```
-L_wiedii_uncertainty_naZero <-
-  meters_to_decdeg(occs_df = Leopardus_wiedii_gbif,
+uncertainty_meters_to_decdeg_naZero <-
+  meters_to_decdeg(
+    occs_df,
     lat_col = "latitude",
     lon_col = "longitude",
     distance = "coordinateUncertaintyInMeters",
-    na_action = "NA as 0")
+    na_action = "NA as 0"
+    )
 ```
 
 ```{r uncertainty from meter to radian degrees NA as 0, echo=FALSE}
@@ -78,10 +80,14 @@ knitr::kable(head(L_wiedii_uncertainty_naZero))
 
 2. NA as NA, leaves NA values as NA, and 
 ```
-L_wiedii_uncertainty_naNA <-
-  meters_to_decdeg(occs_df = Leopardus_wiedii_gbif,
+uncertainty_meters_to_decdeg_naNA <-
+  meters_to_decdeg(
+    occs_df,
+    lat_col = "latitude",
+    lon_col = "longitude",
     distance = "coordinateUncertaintyInMeters",
-    na_action = "NA as NA")
+    na_action = "NA as NA"
+    )
 ```
 
 ```{r uncertainty from meter to radian degrees NA as NA, echo=FALSE}
@@ -95,10 +101,14 @@ knitr::kable(head(L_wiedii_uncertainty_naNA))
 
 3. *NA as mean*, assigns the non-NA uncertainty mean value to NA values.
 ```
-L_wiedii_uncertainty_naMean <-
-  meters_to_decdeg(occs_df = Leopardus_wiedii_gbif,
+uncertainty_meters_to_decdeg_naMean <-
+  meters_to_decdeg(
+    occs_df,
+    lat_col = "latitude",
+    lon_col = "longitude",
     distance = "coordinateUncertaintyInMeters",
-    na_action = "NA as mean")
+    na_action = "NA as mean"
+    )
 ```
 
 ```{r uncertainty from meter to radian degrees NA as mean, echo=FALSE}
@@ -131,7 +141,7 @@ knitr::kable(head(L_wiedii_uncertainty_naMean))
 ```
 L_wiedii_random <-
   generate_occ_uncertain(
-    L_wiedii_uncertainty_naMean,
+    occ_df,
     lat_col = "latitude",
     lon_col = "longitude",
     lat_uncertainty = "lat_uncertainty",
@@ -183,10 +193,11 @@ The function `random_geo_range` accounts for uncertainty and uses a for loop to 
 2. lon_random: Longitude in decimal degrees
 3. Name of taxa
 
+For this example, the funtion uses 10 loops to randomize latitudes and longitudes occurrences, using mean unceetainty for NA values previously obtained with *meters_to_decdeg*.  
 ```
 L_weidii_random_geo_range <- random_geo_range(
   n_length = 10,
-  occs_df = L_wiedii_uncertainty_naMean,
+  occs_df,
   lat_col = "latitude",
   lon_col = "longitude",
   lon_uncertainty = "lon_uncertainty",
@@ -207,7 +218,7 @@ L_weidii_random_geo_range <- random_geo_range(
   taxa_col = "species"
 )
 
-head(L_weidii_random_geo_range)
+knitr::kable(head(L_weidii_random_geo_range))
 ```
 ## 5 Computing from observed dataset with ConR 
 >The Extent of Occurrence is the area contained within the shortest continuous imaginary boundary which can be drawn to encompass all the known, inferred or projected sites of present occurrence of a taxon, excluding cases of vagrancy. (IUCN 2012)
@@ -215,6 +226,7 @@ head(L_weidii_random_geo_range)
 The function logical argument exclude.area, crops areas not suitable for the species. The excluded areas are defined by a shapefile with the argument country_map. Note that it is mandatory to provide a shapefile for country_map if exclude.area is TRUE. 
 ```{r EOO, echo=FALSE}
 library(ConR)
+data(land)
 L_weidii_EOO <-
   EOO.computing(
     Leopardus_wiedii_random,
@@ -232,5 +244,7 @@ L_weidii_AOO <- AOO.computing(Leopardus_wiedii_random)
 
 ## 6.4 Runing IUCN.eval function 
 ```{r IUCN, echo=FALSE}
-L_weidii_IUCN.eval <- IUCN.eval(Leopardus_wiedii_random)
+L_weidii_IUCN.eval <- IUCN.eval(Leopardus_wiedii_random,
+  country_map = land,
+  write_results = F)
 ```
