@@ -29,7 +29,7 @@ Leopardus_wiedii_gbif <- Leopardus_wiedii_gbif
 *****
 # 1. Introduction
 
-This vignette goes through the use of uncertainty meassures of species occurrence records in "occUncertainty: An R package for addressing uncertainty of species occurrence in species distribution models". Here we demostrate how *occUncertain* can be used to transform uncertainty meassures from meters to decimal degrees, how many repetitions of the repetitions of the mutating algorithm are necessary to accurately achieve occurrence records, and we examine whether there is a notable variability in the quantification of the extent area that encompass the inferred or projected sites of occurrence of a species, and the area within the extent polygon they occupy. 
+This vignette goes through the use of uncertainty meassures of species occurrence records in "occUncertainty: An R package for addressing uncertainty of species occurrence in species distribution". Here we demostrate how **occUncertain** can be used to transform uncertainty meassures from meters to decimal degrees. Perform itterations to assess occurrence records variability in the quantification of the extent area that encompass the inferred or projected sites of occurrence of a species, and the area within the extent polygon they occupy. 
 
 ## Input file
 To demonstrate the use of the package occUncertain we used a set of 229 verified, georeferenced occurrence records for the margay (*Leopardus weidii*) a small wild cat native to Central and South America. These occurrences dataset are from the Global Biodiversity Information Facility (GBIF) and are included as part of the occUncertain package.
@@ -48,16 +48,16 @@ knitr::kable(head(Leopardus_wiedii_gbif))
 
 # 2. `meters_to_decdeg` function
 
-The function `meters_to_decdeg` transforms the units into radian degrees for each occurence point. 
-
+The function `meters_to_decdeg` transforms uncertainty from meters into decimal degrees for each occurence point. 
 ***Note 1*: Is impotant to consider the fact that as one moves away from the equator towards a pole, one degree of longitude is multiplied by the cosine of the latitude, decreasing the distance, approaching zero at the pole.  
 
 The function allows interpretation of NA uncertainty values through the conditional parameter `na_action`. 
 
 The options are:
-1. NA as zero, assigns zero to all NA values,
+
+1. **NA as zero**, assigns zero to all NA values,
 ```
-uncertainty_meters_to_decdeg_naZero <-
+Unc_Meters_to_DecDeg_NAZero <-
   meters_to_decdeg(
     occs_df,
     lat_col = "latitude",
@@ -78,9 +78,9 @@ L_wiedii_uncertainty_naZero <-
 knitr::kable(head(L_wiedii_uncertainty_naZero))
 ```
 
-2. NA as NA, leaves NA values as NA, and 
+2. **NA as NA**, leaves NA values as NA, and 
 ```
-uncertainty_meters_to_decdeg_naNA <-
+Unc_Meters_to_DecDeg_NANA <-
   meters_to_decdeg(
     occs_df,
     lat_col = "latitude",
@@ -99,9 +99,9 @@ L_wiedii_uncertainty_naNA <-
 knitr::kable(head(L_wiedii_uncertainty_naNA))
 ```
 
-3. *NA as mean*, assigns the non-NA uncertainty mean value to NA values.
+3. **NA as mean**, assigns the non-NA uncertainty mean value to NA values.
 ```
-uncertainty_meters_to_decdeg_naMean <-
+Unc_Meters_to_DecDeg_NAMean <-
   meters_to_decdeg(
     occs_df,
     lat_col = "latitude",
@@ -124,17 +124,29 @@ knitr::kable(head(L_wiedii_uncertainty_naMean))
 
 # 3. `generate_occ_uncertain` function
 
-The function `generate_occ_uncertain` produces a data frame of random latitude and longitude coordinates for the species occurrences with uncertain values in decimal degrees. The function requires to have an input data.frame with at least four columns in decimal degrees:
+The function `generate_occ_uncertain` produces a random latitude and longitude coordinates data frame, accounting latitude and longitude uncertainty values in decimal degrees. The function requires to have an input data.frame with at least four columns in decimal degrees and the species name:
 
 1. Latitude.
 2. Longitude.
 3. Latitude uncertainty.
 4. Longitude uncertainty.
+5. Species.
 
 ```{r NA as mean, echo=FALSE}
 #combine observed and prodataset with radian 
 L_wiedii_uncertainty_naMean <-
   cbind(Leopardus_wiedii_gbif, L_wiedii_uncertainty_naMean)
+colnames(L_wiedii_uncertainty_naMean)
+
+L_wiedii_uncertainty_naMean <-
+  dplyr::select(
+    L_wiedii_uncertainty_naMean,
+    latitude,
+    longitude,
+    lon_uncertainty,
+    lat_uncertainty,
+    species
+  )
 
 knitr::kable(head(L_wiedii_uncertainty_naMean))
 ```
@@ -164,7 +176,7 @@ knitr::kable(head(L_wiedii_random))
 ```
 
 ## Lets visualize 
-```{r echo=FALSE, fig.width = 7, fig.height= 7 }
+```{r echo=FALSE, fig.width = 7, fig.height= 7, dev.args=list(pointsize=2)}
 #observed occurrences
 plot(Leopardus_wiedii_gbif$longitude, Leopardus_wiedii_gbif$latitude, pch = 19, col = "black", xlab = "Longitude", ylab = "Latitude", 
   main = "L. wiedii observed and generated occurrence points"
@@ -184,6 +196,13 @@ legend(
   pch = c(21, 19),
   cex = 0.8
 )
+plot(land, add=T)
+```
+You can add easily get a map of countries using the package [rnaturalearth](https://CRAN.R-project.org/package=rnaturalearth):
+```{r include=TRUE, echo = TRUE, dev.args=list(pointsize=2)}
+land <- 
+  rnaturalearth::ne_countries(scale = 50, returnclass = "sp")
+```
 ```
 
 # 4. `random_geo_range` function
@@ -193,7 +212,13 @@ The function `random_geo_range` accounts for uncertainty and uses a for loop to 
 2. lon_random: Longitude in decimal degrees
 3. Name of taxa
 
-For this example, the funtion uses 10 loops to randomize latitudes and longitudes occurrences, using mean unceetainty for NA values previously obtained with *meters_to_decdeg*.  
+>The Extent of Occurrence is the area contained within the shortest continuous imaginary boundary which can be drawn to encompass all the known, inferred or projected sites of present occurrence of a taxon, excluding cases of vagrancy. (IUCN 2012)
+
+The function logical argument exclude.area, crops areas not suitable for the species. The excluded areas are defined by a shapefile with the argument country_map. Note that it is mandatory to provide a shapefile for country_map if exclude.area is TRUE. 
+
+>The area occupied by a taxon within its extent of occurrence; known as Area of occupancy (AOO), reflects the fact that a taxon will not usually occur throughout the area of its extent of occurrence. Metric calculatlaed as the area of all known or predicted cells for the species, without unsuitable or unoccupied habitats. The resolution will be 2x2km as required by IUCN.
+
+For this example, the funtion `random_geo_range` uses n_length = 10, to randomly generate latitudes and longitudes occurrences with the function `generate_occ_uncertain`, using mean uncertainty for NA values obtained with `meters_to_decdeg`.  
 ```
 L_weidii_random_geo_range <- random_geo_range(
   n_length = 10,
@@ -206,7 +231,7 @@ L_weidii_random_geo_range <- random_geo_range(
 )
 ```
 
-```{r file, echo=FALSE}
+```{r file, include=FALSE}
 library(ConR)
 L_weidii_random_geo_range <- random_geo_range(
   n_length = 10,
@@ -217,14 +242,14 @@ L_weidii_random_geo_range <- random_geo_range(
   lat_uncertainty = "lat_uncertainty",
   taxa_col = "species"
 )
+```
 
+```{r echo=FALSE}
 knitr::kable(head(L_weidii_random_geo_range))
 ```
-## 5 Computing from observed dataset with ConR 
->The Extent of Occurrence is the area contained within the shortest continuous imaginary boundary which can be drawn to encompass all the known, inferred or projected sites of present occurrence of a taxon, excluding cases of vagrancy. (IUCN 2012)
 
-The function logical argument exclude.area, crops areas not suitable for the species. The excluded areas are defined by a shapefile with the argument country_map. Note that it is mandatory to provide a shapefile for country_map if exclude.area is TRUE. 
-```{r EOO, echo=FALSE}
+```{r EOO, eval=FALSE, include=FALSE}
+## 5 Computing from observed dataset with ConR 
 library(ConR)
 data(land)
 L_weidii_EOO <-
@@ -234,16 +259,12 @@ L_weidii_EOO <-
     country_map = land,
     write_results = F
   )
-```
 
->The area occupied by a taxon within its extent of occurrence; known as Area of occupancy (AOO), reflects the fact that a taxon will not usually occur throughout the area of its extent of occurrence. Metric calculatlaed as the area of all known or predicted cells for the species, without unsuitable or unoccupied habitats. The resolution will be 2x2km as required by IUCN.
-
-```{r AOO, echo=FALSE}
 L_weidii_AOO <- AOO.computing(Leopardus_wiedii_random)
 ```
 
-## 6.4 Runing IUCN.eval function 
-```{r IUCN, echo=FALSE}
+```{r IUCN, eval=FALSE, include=FALSE}
+## 6.4 Runing IUCN.eval function## 6.4 Runing IUCN.eval function
 L_weidii_IUCN.eval <- IUCN.eval(Leopardus_wiedii_random,
   country_map = land,
   write_results = F)
