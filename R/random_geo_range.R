@@ -41,8 +41,14 @@ random_geo_range <-
         taxa_col = taxa_col
       )
       
-      #IUCN 
-      observed.IUCN <- IUCN.eval(occ_random, country_map = land, exclude.area = T, write_results = F)
+      #IUCN
+      observed.IUCN <-
+        IUCN.eval(
+          occ_random,
+          country_map = land,
+          exclude.area = T,
+          write_results = F
+        )
       # Calculate EOO
       EOO_temp <- observed.IUCN$EOO
       # Add new EOO value to rand_EOOs
