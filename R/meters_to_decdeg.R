@@ -41,13 +41,13 @@ meters_to_decdeg <- function(occs_df, lat_col = "latitude",
     warning("Incorrect na_action chosen")
     return(0)
   }
-  
+
   #each degree the radius line of the Earth corresponds to 111139 meters.
   lat_uncertainty <- dist/111325
   #at the equator, longitude approx equals latitude
   #decrease in a trigonometric cosine-based fashion as one moves toward the earth's poles
-  lon_uncertainty <- (dist/111325)  * (cos(lat)) # * pi/180)) #this refers to radians 
-  
+  lon_uncertainty <- (dist/111325)  * (cos(lat * pi/180)) # input to cos is in radians
+
   dist_dd <- data.frame(lon_uncertainty = lon_uncertainty,
                         lat_uncertainty = lat_uncertainty)
   return(dist_dd)
