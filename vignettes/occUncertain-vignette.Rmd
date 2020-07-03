@@ -29,10 +29,10 @@ Leopardus_wiedii_gbif <- Leopardus_wiedii_gbif
 *****
 # 1. Introduction
 
-This vignette goes through the use of uncertainty measures of species occurrence records in "occUncertainty: An R package for addressing uncertainty of species occurrence in species distribution". Here we demonstrate how **occUncertain** can be used to transform uncertainty measures from meters to decimal degrees. Perform itterations to assess occurrence records variability in the quantification of the extent area that encompass the inferred or projected sites of occurrence of a species, and the area within the extent polygon they occupy. 
+This vignette goes through the use of uncertainty measures of species occurrence records in "occUncertainty: An R package for addressing uncertainty of species occurrence in species distribution". Here we demonstrate how **occUncertain** can be used to transform uncertainty measures from meters to decimal degrees. Perform iterations to assess occurrence records variability in the quantification of the extent area that encompass the inferred or projected sites of occurrence of a species, and the area within the extent polygon they occupy. 
 
 ## Input file
-To demonstrate the use of the package occUncertain we used a set of 229 verified, georeferenced occurrence records for the margay (*Leopardus weidii*) a small wild cat native to Central and South America. These occurrences dataset are from the Global Biodiversity Information Facility (GBIF) and are included as part of the occUncertain package.
+To demonstrate the use of the package occUncertain we used a set of 229 verified, georeferenced occurrence records for the margay (*Leopardus weidii*) a small wild cat native to Central and South America. These occurrences data set are from the Global Biodiversity Information Facility (GBIF) and are included as part of the occUncertain package.
 
 The data set requires to have at least four columns: 
 
@@ -48,7 +48,7 @@ knitr::kable(head(Leopardus_wiedii_gbif))
 
 # 2. `meters_to_decdeg` function
 
-The function `meters_to_decdeg` transforms uncertainty from meters into decimal degrees for each occurence point. 
+The function `meters_to_decdeg` transforms uncertainty from meters into decimal degrees for each occurrence point. 
 
 ***Note 1*: Is important to consider the fact that as one moves away from the equator towards a pole, one degree of longitude is multiplied by the cosine of the latitude, decreasing the distance, approaching zero at the pole.  
 
@@ -56,7 +56,7 @@ The function allows interpretation of NA uncertainty values through the conditio
 
 The options are:
 
-1. **NA as zero**, assigns zero to all NA values,
+## 1. **NA as Zero**, assigns zero to all NA values,
 ```
 Unc_Meters_to_DecDeg_NAZero <-
   meters_to_decdeg(
@@ -79,7 +79,7 @@ L_wiedii_uncertainty_naZero <-
 knitr::kable(head(L_wiedii_uncertainty_naZero))
 ```
 
-2. **NA as NA**, leaves NA values as NA, and 
+## 2. **NA as NA**, leaves NA values as NA, and 
 ```
 Unc_Meters_to_DecDeg_NANA <-
   meters_to_decdeg(
@@ -100,7 +100,7 @@ L_wiedii_uncertainty_naNA <-
 knitr::kable(head(L_wiedii_uncertainty_naNA))
 ```
 
-3. **NA as mean**, assigns the non-NA uncertainty mean value to NA values.
+## 3. **NA as Mean**, assigns the uncertainty mean value to NA latitude and longitude values.
 ```
 Unc_Meters_to_DecDeg_NAMean <-
   meters_to_decdeg(
@@ -121,8 +121,6 @@ L_wiedii_uncertainty_naMean <-
 knitr::kable(head(L_wiedii_uncertainty_naMean))
 ```
 
-***Note*: The rest of this vignette will use the conditional na_action = "NA as mean"
-
 # 3. `generate_occ_uncertain` function
 
 The function `generate_occ_uncertain` produces a random latitude and longitude coordinates data frame, accounting latitude and longitude uncertainty values in decimal degrees. The function requires to have an input data.frame with occurrences and uncertainty in decimal degrees and the species name:
@@ -133,7 +131,72 @@ The function `generate_occ_uncertain` produces a random latitude and longitude c
 4. Longitude uncertainty.
 5. Name of Taxa.
 
-```{r NA as mean, echo=FALSE}
+```
+This function generates random latitude and longitude coordinates with decimal degrees uncertainty values.
+
+L_wiedii_random <-
+  generate_occ_uncertain(
+    occ_df,
+    lat_col = "latitude",
+    lon_col = "longitude",
+    lat_uncertainty = "lat_uncertainty",
+    lon_uncertainty = "lon_uncertainty",
+    taxa_col = "species"
+  )
+```  
+
+## 1. **NA as zero**, uses the latitude and longitude uncertainty values as Zero ,
+```{r, echo=FALSE}
+
+L_wiedii_uncertainty_naZero <-
+  cbind(Leopardus_wiedii_gbif, L_wiedii_uncertainty_naZero)
+
+L_wiedii_generate_Zero <-
+  generate_occ_uncertain(
+    L_wiedii_uncertainty_naZero,
+    lat_col = "latitude",
+    lon_col = "longitude",
+    lat_uncertainty = "lat_uncertainty",
+    lon_uncertainty = "lon_uncertainty",
+    taxa_col = "species"
+  )
+
+knitr::kable(head(L_wiedii_generate_Zero))
+```
+
+## 2. **NA as NA**, random lat and lon after removing !NA lat and lon uncertainty 
+
+```{r, echo=FALSE}
+L_wiedii_uncertainty_naNA <-
+  cbind(Leopardus_wiedii_gbif, L_wiedii_uncertainty_naNA)
+
+L_wiedii_uncertainty_naNA <-
+  dplyr::select(
+    L_wiedii_uncertainty_naNA,
+    latitude,
+    longitude,
+    lon_uncertainty,
+    lat_uncertainty,
+    species
+  )
+#filter !is.NA lat and lon uncertinaty 
+L_wiedii_uncertainty_naNA <- dplyr::filter(L_wiedii_uncertainty_naNA, !is.na(lon_uncertainty))
+
+L_wiedii_generate_NA <-
+  generate_occ_uncertain(
+    L_wiedii_uncertainty_naNA,
+    lat_col = "latitude",
+    lon_col = "longitude",
+    lat_uncertainty = "lat_uncertainty",
+    lon_uncertainty = "lon_uncertainty",
+    taxa_col = "species"
+  )
+
+knitr::kable(head(L_wiedii_generate_NA))
+```
+
+##3. **NA as Mean** 
+```{r NA as mean, include=FALSE}
 #combine observed and prodataset with radian 
 L_wiedii_uncertainty_naMean <-
   cbind(Leopardus_wiedii_gbif, L_wiedii_uncertainty_naMean)
@@ -150,19 +213,9 @@ L_wiedii_uncertainty_naMean <-
 
 knitr::kable(head(L_wiedii_uncertainty_naMean))
 ```
-```
-L_wiedii_random <-
-  generate_occ_uncertain(
-    occ_df,
-    lat_col = "latitude",
-    lon_col = "longitude",
-    lat_uncertainty = "lat_uncertainty",
-    lon_uncertainty = "lon_uncertainty",
-    taxa_col = "species"
-  )
-```  
-```{r generate, echo=FALSE}
-L_wiedii_random <-
+
+```{r generate random occ, echo=FALSE}
+L_wiedii_generate_Mean <-
   generate_occ_uncertain(
     L_wiedii_uncertainty_naMean,
     lat_col = "latitude",
@@ -172,41 +225,99 @@ L_wiedii_random <-
     taxa_col = "species"
   )
 
-knitr::kable(head(L_wiedii_random))
+knitr::kable(head(L_wiedii_generate_Mean))
 ```
 
-## Lets visualize 
-```{r echo=FALSE, fig.width = 7, fig.height= 7, dev.args=list(pointsize=2)}
-#observed occurrences
-plot(Leopardus_wiedii_gbif$longitude, Leopardus_wiedii_gbif$latitude, pch = 19, col = "black", xlab = "Longitude", ylab = "Latitude", 
-  main = "L. wiedii observed and generated occurrence points"
-  )
-#generated occurences
-points(
-  L_wiedii_random$lon_random,
-  L_wiedii_random$lat_random,
-  col = "red",
-  pch = 21
-)
-#add legend
-legend(
-  "bottomleft",
-  legend = c("NA as mean generated occurrences", "observed occurrences"),
-  col = c("red", "black"),
-  pch = c(21, 19),
-  cex = 0.8
-)
-plot(land, add=T)
-```
-You can add easily get a map of countries using the package [rnaturalearth](https://CRAN.R-project.org/package=rnaturalearth):
-```{r include=TRUE, echo = TRUE, dev.args=list(pointsize=2)}
+## *Lets visualize*
+
+```{r eval=FALSE, dev.args=list(pointsize=2), include=FALSE, list(pointsize=2)}
+#You can add easily get a map of countries using the package [rnaturalearth](https://CRAN.R-project.org/package=rnaturalearth):
 land <- 
   rnaturalearth::ne_countries(scale = 50, returnclass = "sp")
 ```
+
+```{r echo=FALSE, fig.width = 10, fig.height= 10}
+library(ggplot2)
+data(land)
+map <- map_data("world")
+
+theme_set(theme_bw())
+
+#observed data
+ggplot(
+  data = Leopardus_wiedii_gbif,
+  aes(x = longitude, y = latitude,
+  colour = "Observed occ"),
+  size = 0.1,
+  fill = NA,
+  shape = 1,
+  alpha = 0.2
+) +
+  
+  
+  geom_polygon(
+    data = map,
+    aes(x = long, y = lat, group = group),
+    fill = NA,
+    colour = "grey"
+  ) +
+  coord_fixed(xlim = c(-85,-70), ylim = c(-5, 10)) +
+  
+  #different NA_option results
+  geom_point() +
+   geom_point(
+    data = L_wiedii_generate_Mean,
+    aes(x = lon_random, y = lat_random,
+    colour = "NA as Mean"),
+    #size = 0.01,
+    fill = NA,
+    shape = 1,
+    alpha = 0.5
+  ) +
+  geom_point(
+    data = L_wiedii_generate_Zero,
+    aes(x = lon_random, y = lat_random,
+    colour = "NA as Zero"),
+    shape = 1,
+        #size = 1,
+    fill = NA,
+    alpha = 0.5
+  ) +
+  geom_point(
+    data = L_wiedii_generate_NA,
+    aes(x = lon_random, y = lat_random,
+    colour = "NA as NA"),
+    #size = 0.01,
+    fill = NA,
+    shape = 1,
+    alpha = 0.5
+  ) +
+  scale_colour_manual(
+    "",
+    values = c(
+      "Observed occ" = "yellow",
+      "NA as Mean" = "green",
+      "NA as Zero" = "blue",
+      "NA as NA" = "red"
+    )
+  ) +
+  
+  labs(title = "L. wiedii observed and generated occurrences", subtitle = "Generated occurrences with meters to decimal degree uncertainty NA_action parameters "
+    )
+  
 ```
+  
+    
+  
+
+
+"NA as Zero generated occurrences"
+"NA as NA generated occurrences"
+    "NA as mean generated occurrences"
 
 # 4. `random_geo_range` function
-The function `random_geo_range` accounts for uncertainty and uses a for loop to randomize occurence points. Produces a data frame with values for extent of occurrence (EOO)and area of occupancy (AOO), with ConR package functions (compute.EOO and compute.AOO). The function requires an input data frame with three different columns in order:
+
+The function `random_geo_range` accounts for uncertainty and uses a for loop to randomize occurrence points. Produces a data frame with values for extent of occurrence (EOO)and area of occupancy (AOO), with ConR package functions (compute.EOO and compute.AOO). The function requires an input data frame with three different columns in order:
 
 1. lat_random: Latitude in decimal degrees
 2. lon_random: Longitude in decimal degrees
@@ -216,9 +327,9 @@ The function `random_geo_range` accounts for uncertainty and uses a for loop to 
 
 The function logical argument exclude.area, crops areas not suitable for the species. The excluded areas are defined by a shapefile with the argument country_map. Note that it is mandatory to provide a shapefile for country_map if exclude.area is TRUE. 
 
->The area occupied by a taxon within its extent of occurrence; known as Area of occupancy (AOO), reflects the fact that a taxon will not usually occur throughout the area of its extent of occurrence. Metric calculatlaed as the area of all known or predicted cells for the species, without unsuitable or unoccupied habitats. The resolution will be 2x2km as required by IUCN.
+>The area occupied by a taxon within its extent of occurrence; known as Area of occupancy (AOO), reflects the fact that a taxon will not usually occur throughout the area of its extent of occurrence. Metric calculated as the area of all known or predicted cells for the species, without unsuitable or unoccupied habitats. The resolution will be 2x2km as required by IUCN.
 
-For this example, the funtion `random_geo_range` uses n_length = 10, to randomly generate latitudes and longitudes occurrences with the function `generate_occ_uncertain`, using mean uncertainty for NA values obtained with `meters_to_decdeg`.  
+For this example, the function `random_geo_range` uses n_length = 10, to randomly generate latitudes and longitudes occurrences with the function `generate_occ_uncertain`, using mean uncertainty for NA values obtained with `meters_to_decdeg`.  
 ```
 L_weidii_random_geo_range <- random_geo_range(
   n_length = 10,
@@ -230,9 +341,9 @@ L_weidii_random_geo_range <- random_geo_range(
   taxa_col = "species"
 )
 ```
+***Note*: The rest of this vignette will use the data frame produced with conditional na_action = "NA as mean" in the `meters_to_decdeg` function
 
-```{r file, include=FALSE}
-library(ConR)
+```{r file, eval=FALSE, include=FALSE}
 L_weidii_random_geo_range <- random_geo_range(
   n_length = 10,
   occs_df = L_wiedii_uncertainty_naMean,
@@ -244,7 +355,7 @@ L_weidii_random_geo_range <- random_geo_range(
 )
 ```
 
-```{r echo=FALSE}
+```{r eval=FALSE, include=FALSE}
 knitr::kable(head(L_weidii_random_geo_range))
 ```
 
