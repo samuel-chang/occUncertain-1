@@ -304,7 +304,8 @@ ggplot(
   
   labs(title = "L. wiedii observed and generated occurrences", subtitle = "Generated occurrences with meters to decimal degree uncertainty NA_action parameters "
     )
-  
+
+
 ```
   
     

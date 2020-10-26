@@ -29,6 +29,7 @@ random_geo_range <-
   {
     rand_EOOs = c()
     rand_AOOs = c()
+    rand_CritB = c()
     
     for (i in 1:n_length) {
       set.seed(i)
@@ -59,7 +60,9 @@ random_geo_range <-
       # Add new AOO value to rand_AOOs
       rand_AOOs <- c(rand_AOOs, AOO_temp)
       
+      #Add new value to CritB
+      rand_CritB <- c(rand_CritB, observed.IUCN$Category_CriteriaB)
       
     }
-    return (data.frame(rand_EOO = rand_EOOs, rand_AOO = rand_AOOs))
+    return (data.frame(rand_EOO = rand_EOOs, rand_AOO = rand_AOOs, rand_CritB = rand_CritB))
   }
