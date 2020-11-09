@@ -49,7 +49,7 @@
 #' \code{method_protected_area} is "no_more_than_one", all occurrences within a
 #' given protected area will be considered as one location. Occurrences outside
 #' protected area will be used for estimating the number of locations using
-#' overlaying grid as descrived above. See the vignette for illustration. \cr -
+#' overlaying grid as described above. See the vignette for illustration. \cr -
 #' if \code{method_protected_area} is NOT "no_more_than_one", number of
 #' locations will be estimated by the overlaying grid as described above, but
 #' by considering differently occurrences outside and inside protected area. \cr
@@ -70,12 +70,12 @@
 #' the 180th meridian.
 #'
 #'
-#' @param occs_df A \code{dataframe} georeferenced occurrence
+#' @param occs_df a \code{dataframe} georeferenced occurrence
 #' @param n_length Number of iterations
-#' @param lat_col Name of column of latitude values. Caps sensitive
-#' @param lon_col Name of column of longitude values. Caps sensitive
-#' @param lat_uncertainty Name of column of latitude uncertainty in degree values
-#' @param lon_uncertainty Name of column of longitude uncertainty (in decimal degrees)
+#' @param lat_col latitude values decimal degrees column 
+#' @param lon_col longitude decimal degrees column 
+#' @param lat_uncertainty latitude uncertainty decimal degrees column 
+#' @param lon_uncertainty longitude uncertainty decimal degrees column 
 #' @param taxa_col character or factor, taxa names
 #' @param country_map a \code{SpatialPolygonsDataFrame} or
 #' \code{SpatialPolygons} showing for example countries or continent borders.
@@ -98,11 +98,10 @@
 #' @param draw.poly.EOO a logical, if TRUE, the polygon used for estimating EOO
 #' is drawn. By default, it is TRUE
 #' @param protec.areas a \code{SpatialPolygonsDataFrame}, shapefile with
-#' protected areas.  If provided, this will be taken into account for
+#' protected areas. If provided, this will be taken into account for
 #' calculating number of location (see Details and
 #' \code{method_protected_area}).  By default, it is the World Database on Protected 
-#' Areas (WDPA) shapefile is provided
-#' \code{WDPA}
+#' Areas \code{WDPA}
 #' @param method_protected_area a character string. By default is
 #' "no_more_than_one"", which means occurrences within protected areas (if
 #' provided) will not be taken into account for estimating the number of
