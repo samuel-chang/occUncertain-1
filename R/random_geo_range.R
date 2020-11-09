@@ -115,11 +115,6 @@
 #' @param Cell_size_locations a numeric, value indicating the grid size in
 #' kilometers used for estimating the number of location. By default, equal to
 #' 10
-#' @param SubPop a logical. If TRUE, sub-populations will be estimated. By
-#' default, it is TRUE
-#' @param Resol_sub_pop a numeric, value indicating the radius size in
-#' kilometers used for estimating the number of sub-population. By default,
-#' equal to 5
 #' @param DrawMap a logical, if TRUE a map is produced for each species in png
 #' format, unless map_pdf is TRUE. By default, it is FALSE
 #' @param add.legend a logical, if TRUE a legend and a submap showing
@@ -145,13 +140,11 @@ random_geo_range <-
            write_shp = FALSE,
            map_pdf = TRUE, 
            draw.poly.EOO = TRUE,
-           protec.areas = NULL,
+           #protec.areas = NULL,
            method_protected_area = "no_more_than_one",
            ID_shape_PA = NULL, 
            Cell_size_AOO = 2,
            Cell_size_locations = 10,
-           SubPop = TRUE,
-           Resol_SubPop = 5,
            DrawMap = FALSE,
            add.legend = TRUE, 
            write_results = FALSE,
@@ -185,13 +178,11 @@ random_geo_range <-
           write_shp = write_shp,
           map_pdf = map_pdf,
           draw.poly.EOO = draw.poly.EOO,
-          protec.areas = protect.areas,
+          #protec.areas = protect.areas,
           method_protected_area = method_protected_area,
           ID_shape_PA = ID_shape_PA,
           Cell_size_AOO = Cell_size_AOO,
           Cell_size_locations = Cell_size_locations,
-          SubPop = SubPop,
-          Resol_SubPop = Resol_SubPop,
           DrawMap = DrawMap,
           add.legend = add.legend,
           write_results = write_results,
@@ -212,7 +203,7 @@ random_geo_range <-
       rand_CritB <- c(rand_CritB, observed.IUCN$Category_CriteriaB)
       
     }
-    return (occ_random.frame(
+    return (data.frame(
       EOO = rand_EOOs,
       AOO = rand_AOOs,
       Cat_CritB = rand_CritB
