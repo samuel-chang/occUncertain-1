@@ -94,7 +94,7 @@
 #' used for EOO computation are written as ESRI shapefiles in a sub-directory
 #' in the working directory. By default, it is FALSE
 #' @param map_pdf a logical, if TRUE, maps are exported in one pdf file.
-#' Otherwise, each species map is exported in png. By default, it is TRUE
+#' Otherwise, each species map is exported in png. By default, it is FALSE
 #' @param draw.poly.EOO a logical, if TRUE, the polygon used for estimating EOO
 #' is drawn. By default, it is TRUE
 #' @param protec.areas a \code{SpatialPolygonsDataFrame}, shapefile with
@@ -116,7 +116,7 @@
 #' kilometers used for estimating the number of location. By default, equal to
 #' 10
 #' @param DrawMap a logical, if TRUE a map is produced for each species in png
-#' format, unless map_pdf is TRUE. By default, it is FALSE
+#' format, unless map_pdf is TRUE. By default, it is TRUE
 #' @param add.legend a logical, if TRUE a legend and a submap showing
 #' distribution in 'country_map' are displayed for each map. By default, it is
 #' TRUE
@@ -138,14 +138,14 @@ random_geo_range <-
            method.range = "convex.hull",
            export_shp = FALSE,
            write_shp = FALSE,
-           map_pdf = TRUE, 
+           map_pdf = FALSE, 
            draw.poly.EOO = TRUE,
-           #protec.areas = NULL,
+           protec.areas = NULL,
            method_protected_area = "no_more_than_one",
            ID_shape_PA = NULL, 
            Cell_size_AOO = 2,
            Cell_size_locations = 10,
-           DrawMap = FALSE,
+           DrawMap = TRUE,
            add.legend = TRUE, 
            write_results = FALSE,
            write_file_option = "excel",
@@ -154,9 +154,9 @@ random_geo_range <-
     rand_EOOs = c()
     rand_AOOs = c()
     rand_CritB = c()
+    rand_Nbe_Loc = c()
     
     for (i in 1:n_length) {
-      set.seed(i)
       occ_random <- generate_occ_uncertain(
         occs_df,
         lat_col = lat_col,
@@ -189,12 +189,17 @@ random_geo_range <-
           write_file_option = write_file_option
         )
    
-      # Calculate EOO
+      
+       if (DrawMap) {
+                  file.rename(from = "results.png", to = paste0("results", i,".png"))
+       }
+      
+      # Add new EOO to rand_EOOs
       EOO_temp <- observed.IUCN$EOO
       # Add new EOO value to rand_EOOs
       rand_EOOs <- c(rand_EOOs, EOO_temp)
       
-      # Calculate AOO
+      # Add new AOO to rand_AOOs
       AOO_temp <- observed.IUCN$AOO
       # Add new AOO value to rand_AOOs
       rand_AOOs <- c(rand_AOOs, AOO_temp)
@@ -202,11 +207,16 @@ random_geo_range <-
       #Add new value to CritB
       rand_CritB <- c(rand_CritB, observed.IUCN$Category_CriteriaB)
       
+      #Add new value to Nbe_Loc
+      rand_Nbe_Loc = c(rand_Nbe_Loc, observed.IUCN$Nbe_loc)
+      
     }
+  
     return (data.frame(
       EOO = rand_EOOs,
       AOO = rand_AOOs,
-      Cat_CritB = rand_CritB
+      Cat_CritB = rand_CritB,
+      Num_Loc = rand_Nbe_Loc
     ))
   }
     
