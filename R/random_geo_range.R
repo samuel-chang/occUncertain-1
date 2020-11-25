@@ -41,7 +41,7 @@
 #' ecologically distinct area in which a single threatening event can affect
 #' all individuals of the taxon". A simple way to include threat level is to
 #' rely on a map of protected areas and assume that populations within and
-#' 
+#'
 #' outside protected areas are under different threat level.\cr
 #'
 #' If a map of protected area is provided, this one is used for estimating the
@@ -72,10 +72,10 @@
 #'
 #' @param occs_df a \code{dataframe} georeferenced occurrence
 #' @param n_length Number of iterations
-#' @param lat_col latitude values decimal degrees column 
-#' @param lon_col longitude decimal degrees column 
-#' @param lat_uncertainty latitude uncertainty decimal degrees column 
-#' @param lon_uncertainty longitude uncertainty decimal degrees column 
+#' @param lat_col latitude values decimal degrees column
+#' @param lon_col longitude decimal degrees column
+#' @param lat_uncertainty latitude uncertainty decimal degrees column
+#' @param lon_uncertainty longitude uncertainty decimal degrees column
 #' @param taxa_col character or factor, taxa names
 #' @param country_map a \code{SpatialPolygonsDataFrame} or
 #' \code{SpatialPolygons} showing for example countries or continent borders.
@@ -100,7 +100,7 @@
 #' @param protec.areas a \code{SpatialPolygonsDataFrame}, shapefile with
 #' protected areas. If provided, this will be taken into account for
 #' calculating number of location (see Details and
-#' \code{method_protected_area}).  By default, it is the World Database on Protected 
+#' \code{method_protected_area}).  By default, it is the World Database on Protected
 #' Areas \code{WDPA}
 #' @param method_protected_area a character string. By default is
 #' "no_more_than_one"", which means occurrences within protected areas (if
@@ -138,15 +138,15 @@ random_geo_range <-
            method.range = "convex.hull",
            export_shp = FALSE,
            write_shp = FALSE,
-           map_pdf = FALSE, 
+           map_pdf = FALSE,
            draw.poly.EOO = TRUE,
            protec.areas = NULL,
            method_protected_area = "no_more_than_one",
-           ID_shape_PA = NULL, 
+           ID_shape_PA = NULL,
            Cell_size_AOO = 2,
            Cell_size_locations = 10,
            DrawMap = TRUE,
-           add.legend = TRUE, 
+           add.legend = TRUE,
            write_results = FALSE,
            write_file_option = "excel",
            ...)
@@ -157,7 +157,6 @@ random_geo_range <-
     rand_Nbe_loc = c()
     rand_Category_AOO = c()
     rand_Category_EOO = c()
-    rand_Cateogry_code = c()
     
     for (i in 1:n_length) {
       occ_random <- generate_occ_uncertain(
@@ -191,11 +190,11 @@ random_geo_range <-
           write_results = write_results,
           write_file_option = write_file_option
         )
-   
       
-       if (DrawMap) {
-                  file.rename(from = "results.png", to = paste0("results", i,".png"))
-       }
+     
+      if (DrawMap) {
+        file.rename(from = "results.png", to = paste0("results", i, ".png"))
+      }
       
       # Add new EOO to rand_EOOs
       EOO_temp <- observed.IUCN$EOO
@@ -208,32 +207,32 @@ random_geo_range <-
       rand_AOOs <- c(rand_AOOs, AOO_temp)
       
       #Add new value to CritB
-      rand_CritB <- c(rand_CritB, observed.IUCN$Category_CriteriaB)
+      CritB_temp <- observed.IUCN$Category_CriteriaB
+      rand_CritB <- c(rand_CritB, CritB_temp)
       
       #Add new value to Nbe_Loc
-      rand_Nbe_loc = c(rand_Nbe_loc, observed.IUCN$Nbe_loc)
+      Nbe_loc_temp <- observed.IUCN$Nbe_loc
+      rand_Nbe_loc <- c(rand_Nbe_loc, Nbe_loc_temp)
       
       #Add AOO Category
-      rand_Category_AOO = c(rand_Category_AOO, observed.IUCN$Category_AOO)
+      Cat_AOO_temp <- observed.IUCN$Category_AOO
+      rand_Category_AOO <- c(rand_Category_AOO, Cat_AOO_temp)
       
       #Add EOO Category
-      rand_Category_EOO = c(rand_Category_EOO, observed.IUCN$Category_EOO)
+      Cat_EOO_temp <- observed.IUCN$Category_EOO
+      rand_Category_EOO <- c(rand_Category_EOO, Cat_EOO_temp)
       
-      #Add code for Category
-      rand_Cateogry_code = c(rand_Category_code, observed.IUCN$Category_code)
       
     }
-  
-    return (data.frame(
-      EOO = rand_EOOs,
-      AOO = rand_AOOs,
-      Cat_CritB = rand_CritB,
-      Category_code = rand_Cateogry_code,
-      Category_AOO = rand_Category_AOO,
-      Category_EOO = rand_Category_EOO,
-      Num_Loc = rand_Nbe_loc,
-      
-    ))
-  }
     
-  
+    return(
+      data.frame(
+        EOO = rand_EOOs,
+        AOO = rand_AOOs,
+        Cat_CritB = rand_CritB,
+        Num_Loc = rand_Nbe_loc,
+        Category_AOO = rand_Category_AOO,
+        Category_EOO = rand_Category_EOO
+      )
+    )
+  }
