@@ -157,6 +157,7 @@ random_geo_range <-
     rand_Nbe_loc = c()
     rand_Category_AOO = c()
     rand_Category_EOO = c()
+    rand_Category_code = c()
     
     for (i in 1:n_length) {
       occ_random <- generate_occ_uncertain(
@@ -222,6 +223,10 @@ random_geo_range <-
       Cat_EOO_temp <- observed.IUCN$Category_EOO
       rand_Category_EOO <- c(rand_Category_EOO, Cat_EOO_temp)
       
+      #Add Category code
+      Category_code_temp <- observed.IUCN$Category_code
+      rand_Category_code <- c(rand_Category_code, Category_code_temp)
+      
       
     }
     
@@ -232,7 +237,8 @@ random_geo_range <-
         Cat_CritB = rand_CritB,
         Num_Loc = rand_Nbe_loc,
         Category_AOO = rand_Category_AOO,
-        Category_EOO = rand_Category_EOO
+        Category_EOO = rand_Category_EOO,
+        Category_Code = rand_Category_code
       )
     )
   }
