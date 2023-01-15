@@ -42,7 +42,6 @@ The data set requires to have at least four columns:
 1. Name of taxa
 
 ```{r TableData,include=TRUE, echo=FALSE}
-#Leopardus_wiedii_gbif <- dplyr::select(Leopardus_wiedii_gbif, latitude, longitude, coordinateUncertaintyInMeters, species)
 knitr::kable(head(Leopardus_wiedii_gbif))
 ```
 
