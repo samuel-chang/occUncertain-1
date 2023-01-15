@@ -8,7 +8,7 @@
 An object of class \code{data.frame} with 229 rows and 4 columns.
 }
 \source{
-\url{http://www.gbif.org}
+\url{https://www.gbif.org}
 }
 \usage{
 Leopardus_wiedii_gbif
