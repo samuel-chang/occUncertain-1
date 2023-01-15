@@ -6,9 +6,14 @@ Date: 2023-01-14
 Authors@R: c(
     person("Samuel V.", "Chang Triguero", email = "changalfsam@gmail.com", role = c("aut", "cre")), 
     person("Matthew E.", "Aiello-Lammens", email = "matt.lammens@gmail.com", role = "aut"))
-Description: A set of functions that can be used to help ecologists and 
-    conservation biologists account for occurence point uncertainty when 
-    calculating spatial metrics such as AOO and EOO.
+Description: Functions for repeatable processing of species occurrence datasets that makes it easier to propagate 
+    georeferencing imprecisions and data input mistakes to downstream analyses, allowing analysts to assess 
+    the impacts of these imprecisions. Users can use the software to: 
+    (a) change each coordinate record's uncertainty from meters to decimal degrees, 
+    (b) deal with records that don't have uncertainty values in multiple ways, 
+    (c) create a new random location for each occurrence using a uniform distribution with a defined interval 
+    within the occurrence location uncertainty, and 
+    (d) use repetitions to quantify range of occurrence (EEO) or occupancy (AOO) with attribute uncertainty. 
 BugReports: https://github.com/mlammens/occUncertain/issues
 Depends:
     knitr,
