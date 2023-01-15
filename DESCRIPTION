@@ -4,7 +4,7 @@ Title: Addressing Occurence Point Uncertainty When Calculating Spatial Metrics
 Version: 0.1.0
 Date: 2023-01-14
 Authors@R: c(
-    person("Samuel V.", "Chang Triguero", email = "sc92478p@pace.edu", role = c("aut", "cre")), 
+    person("Samuel V.", "Chang Triguero", email = "changalfsam@gmail.com", role = c("aut", "cre")), 
     person("Matthew E.", "Aiello-Lammens", email = "matt.lammens@gmail.com", role = "aut"))
 Description: A set of functions that can be used to help ecologists and 
     conservation biologists account for occurence point uncertainty when 
