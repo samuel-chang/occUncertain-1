@@ -13,7 +13,7 @@ Description: Functions for repeatable processing of species occurrence datasets 
     (b) deal with records that don't have uncertainty values in multiple ways, 
     (c) create a new random location for each occurrence using a uniform distribution with a defined interval 
     within the occurrence location uncertainty, and 
-    (d) use repetitions to quantify range of occurrence (EEO) or occupancy (AOO) with attribute uncertainty. 
+    (d) use repetitions to quantify range of occurrence (EOO) or occupancy (AOO) with attribute uncertainty. 
 BugReports: https://github.com/mlammens/occUncertain/issues
 Depends:
     knitr,
