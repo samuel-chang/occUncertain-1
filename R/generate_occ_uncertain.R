@@ -21,7 +21,7 @@
 #' @param lat_uncertainty Name of column of latitude uncertainty in degree values. Caps sensitive.
 #' @param lon_uncertainty Name of column of longitude uncertainty in degree values. Caps sensitive.
 #' @param taxa_col Name of column of taxa (species) values. Caps sensitive.
-
+#' @return random_dd A \code{data.frame} of a random latitude, random longitude and taxa name for each occurence record.
 
 generate_occ_uncertain <-
   function(occs_df,

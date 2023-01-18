@@ -112,7 +112,10 @@
 #' @param write_file_option a character, if "excel", results are exported in
 #' excel file, if "csv", results are exported in csv. By default, it is "excel"
 #' @import ConR knitr rgdal
-
+#' @return A \code{data.frame} of EOO, AOO, Category in Criterion B, Number of locations, Category of AOO, Category of EOO,
+#' Cateogry Code for each iteration. 
+#' @examples 
+#' #usage of random_geo_range
 
 random_geo_range <-
   function(n_length,
