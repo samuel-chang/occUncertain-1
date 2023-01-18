@@ -1,6 +1,6 @@
 Package: occUncertain
 Type: Package
-Title: Addressing Occurence Point Uncertainty When Calculating Spatial Metrics
+Title: Addressing Occurrence Point Uncertainty When Calculating Spatial Metrics
 Version: 0.1.0
 Date: 2023-01-14
 Authors@R: c(
@@ -10,7 +10,7 @@ Description: Repeatable processing of species occurrence datasets that makes it 
     georeferencing imprecisions and data input mistakes to downstream analyses, allowing analysts to assess 
     the impacts of these imprecisions in quantifying range of occurrence (EOO) or  area of occupancy (AOO) . Users can use the software to: 
     (a) change each coordinate record's uncertainty from meters to decimal degrees,
-    The formula for converting from meters to decimal degrees is in part based on information from the ESRI ArcUser magazine "Measuring in Arc-Seconds" at this site{https://www.esri.com/news/arcuser/0400/wdside.html}
+    The formula for converting from meters to decimal degrees is in part based on information from the ESRI ArcUser magazine "Measuring in Arc-Seconds" at this site<https://www.esri.com/news/arcuser/0400/wdside.html>
     (b) deal with records that don't have uncertainty values in multiple ways, 
     (c) create a new random location for each occurrence using a uniform distribution with a defined interval 
     within the occurrence location uncertainty, and 
