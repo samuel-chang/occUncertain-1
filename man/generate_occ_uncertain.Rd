@@ -27,6 +27,9 @@ generate_occ_uncertain(
 
 \item{taxa_col}{Name of column of taxa (species) values. Caps sensitive.}
 }
+\value{
+random_dd A \code{data.frame} of a random latitude, random longitude and taxa name for each occurence record.
+}
 \description{
 \code{generate_occ_uncertain} Given a data frame of georeferenced occurrences this function generates a new set of coordinates with added uncertainty.
 }

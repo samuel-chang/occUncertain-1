@@ -114,8 +114,6 @@
 #' @import ConR knitr rgdal
 #' @return A \code{data.frame} of EOO, AOO, Category in Criterion B, Number of locations, Category of AOO, Category of EOO,
 #' Cateogry Code for each iteration. 
-#' @examples 
-#' #usage of random_geo_range
 
 random_geo_range <-
   function(n_length,
@@ -227,3 +225,32 @@ random_geo_range <-
       )
     )
   }
+
+#' @examples 
+#' #usage of randon_geo_range with 10 iterations for the three different options for NA values
+#' L_weidii_random_geo_range_naMean <- random_geo_range(
+#' n_length = 10,
+#' occs_df = L_wiedii_uncertainty_naMean,
+#' lat_col = "latitude",
+#' lon_col = "longitude",
+#' lon_uncertainty = "lon_uncertainty",
+#' lat_uncertainty = "lat_uncertainty",
+#' taxa_col = "species")
+#' 
+#' L_weidii_random_geo_range_naZero <- random_geo_range(
+#' n_length = 10,
+#' occs_df = L_wiedii_uncertainty_naZero,
+#' lat_col = "latitude",
+#' lon_col = "longitude",
+#' lon_uncertainty = "lon_uncertainty",
+#' lat_uncertainty = "lat_uncertainty",
+#' taxa_col = "species")
+#' 
+#' L_weidii_random_geo_range_naNA <- random_geo_range(
+#' n_length = 10,
+#' occs_df = L_wiedii_uncertainty_naNA,
+#' lat_col = "latitude",
+#' lon_col = "longitude",
+#' lon_uncertainty = "lon_uncertainty",
+#' lat_uncertainty = "lat_uncertainty",
+#' taxa_col = "species")

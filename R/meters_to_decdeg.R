@@ -51,3 +51,31 @@ meters_to_decdeg <- function(occs_df, lat_col = "latitude",
                         lat_uncertainty = lat_uncertainty)
   return(dist_dd)
 }
+
+#' @examples
+#' #Create sample data frame for 4 occurrences and their uncertinaty in meters for L. Wiedii
+#' df <- data.frame (latitude = as.numeric(c("-12.660784","-30.397000","-30.225833","-28.938616")), 
+#'                  longitude = as.numeric(c("-68.75897","-51.45458","-54.75972","-53.35768")), 
+#'                  coordinateUncertaintyInMeters = as.numeric(c("31069", NA, NA,"29558")), 
+#'                  species =("Leopardus wiedii"))
+#' 
+#' # Usage of meters_to_decdeg with NA as Zero
+#'L_wiedii_uncertainty_naZero <-meters_to_decdeg(occs_df = df, 
+#'                                               lat_col = "latitude", 
+#'                                               lon_col = "longitude", 
+#'                                               distance = "coordinateUncertaintyInMeters", 
+#'                                               na_action = "NA as 0")
+#'                                               
+#' # Usage of meters_to_decdeg with NA as NA
+#'L_wiedii_uncertainty_naNA <-meters_to_decdeg(occs_df = df, 
+#'                                               lat_col = "latitude", 
+#'                                               lon_col = "longitude", 
+#'                                               distance = "coordinateUncertaintyInMeters", 
+#'                                               na_action = "NA as NA")
+#' 
+#' # Usage of meters_to_decdeg with NA as Mean
+#'L_wiedii_uncertainty_naMean <-meters_to_decdeg(occs_df = df, 
+#'                                               lat_col = "latitude", 
+#'                                               lon_col = "longitude", 
+#'                                               distance = "coordinateUncertaintyInMeters", 
+#'                                               na_action = "NA as mean")                                                                                            

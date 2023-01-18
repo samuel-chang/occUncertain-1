@@ -89,6 +89,10 @@ which can csv or excel, see write_file_option. By default, it is FALSE}
 \item{write_file_option}{a character, if "excel", results are exported in
 excel file, if "csv", results are exported in csv. By default, it is "excel"}
 }
+\value{
+A \code{data.frame} of EOO, AOO, Category in Criterion B, Number of locations, Category of AOO, Category of EOO,
+Cateogry Code for each iteration.
+}
 \description{
 \code{random_geo_range} Given georeferenced coordinates and associated uncertainty. This function generates random statistics values (Extent of Occurrence, Area of Occupancy, number of locations, number of subpopulations) and provide a preliminary conservation status following Criterion B of IUCN.  A graphical map output is also available.
 }

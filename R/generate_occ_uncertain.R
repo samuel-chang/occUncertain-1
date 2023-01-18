@@ -45,3 +45,29 @@ generate_occ_uncertain <-
   random_dd <- data.frame(lat_random = lat_random, lon_random = lon_random, tax = occs_df[[taxa_col]] )
   return(random_dd)
 }
+
+#' @examples 
+#' #Usage of generate_ooc_uncertain for the differnt options for NA values to generate new data frames with uncertinaty
+#' L_wiedii_generate_Mean <-generate_occ_uncertain(
+#'  L_wiedii_uncertainty_naMean,
+#'  lat_col = "latitude",
+#'  lon_col = "longitude",
+#'  lat_uncertainty = "lat_uncertainty",
+#'  lon_uncertainty = "lon_uncertainty",
+#'  taxa_col = "species")
+#' 
+#' L_wiedii_generate_NA <- generate_occ_uncertain(
+#'  L_wiedii_uncertainty_naNA,
+#'  lat_col = "latitude",
+#'  lon_col = "longitude",
+#'  lat_uncertainty = "lat_uncertainty",
+#'  lon_uncertainty = "lon_uncertainty",
+#'  taxa_col = "species")
+#'  
+#' L_wiedii_generate_Zero <- generate_occ_uncertain(
+#'  L_wiedii_uncertainty_naZero,
+#'  lat_col = "latitude",
+#'  lon_col = "longitude",
+#'  lat_uncertainty = "lat_uncertainty",
+#'  lon_uncertainty = "lon_uncertainty",
+#'  taxa_col = "species")
